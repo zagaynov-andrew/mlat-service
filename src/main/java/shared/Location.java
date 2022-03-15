@@ -1,9 +1,9 @@
-package Shared;
+package shared;
 
 /**
  * @brief Stores the location.
  */
 public class Location {
 
-    public int x;
+    public float x;
 }

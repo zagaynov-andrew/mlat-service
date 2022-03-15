@@ -1,6 +1,6 @@
-package DataCenter;
+package datacenter;
 
-import Shared.Location2D;
+import shared.Location2D;
 
 public class MLATStation extends Station {
 

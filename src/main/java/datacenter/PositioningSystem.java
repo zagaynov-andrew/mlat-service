@@ -1,7 +1,7 @@
-package DataCenter;
+package datacenter;
 
-import Shared.Location;
-import Shared.Message;
+import shared.Location;
+import shared.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
