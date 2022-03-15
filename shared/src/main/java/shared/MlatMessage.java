@@ -5,13 +5,13 @@ import java.nio.ByteBuffer;
 import java.time.Instant;
 
 
-public class MLATMessage extends Message implements Serializable {
+public class MlatMessage extends Message implements Serializable {
 
     private final int objectId;
     private final Instant sendTime;
     private final transient int stationId;
 
-    MLATMessage(int objectId, Instant sendTime, int stationId) {
+    public MlatMessage(int objectId, Instant sendTime, int stationId) {
         this.objectId = objectId;
         this.sendTime = sendTime;
         this.stationId = stationId;
@@ -23,7 +23,6 @@ public class MLATMessage extends Message implements Serializable {
         int checksum = 0;
         for (byte b : buf.array())
             checksum = Integer.rotateLeft(checksum, 1) ^ b;
-        System.out.println(checksum);
     }
 
     public int getObjectId() {
@@ -39,6 +38,6 @@ public class MLATMessage extends Message implements Serializable {
     }
 
     public static void main(String[] args) {
-        new MLATMessage(7, Instant.ofEpochMilli(873), 3);
+        new MlatMessage(7, Instant.ofEpochMilli(873), 3);
     }
 }

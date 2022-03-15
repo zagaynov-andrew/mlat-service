@@ -1,22 +1,22 @@
 package datacenter;
 
 import shared.Location2D;
-import shared.MLATMessage;
 import shared.Message;
+import shared.MlatMessage;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class MLATSystem extends PositioningSystem {
+public class MlatSystem extends PositioningSystem {
 
     private static final Instant TIMEOUT = Instant.ofEpochSecond(1);
     private HashMap<Integer, Instant> lastCheck;
 
     @Override
     public boolean addStation(Station station) {
-        if (!(station instanceof MLATStation))
+        if (!(station instanceof MlatStation))
             return false;
         return stations.put(station.getId(), station) != null;
     }
@@ -28,9 +28,9 @@ public class MLATSystem extends PositioningSystem {
 
     @Override
     public boolean addMessage(Message message) {
-        if (!(message instanceof MLATMessage))
+        if (!(message instanceof MlatMessage))
             return false;
-        MLATMessage mlatMessage = (MLATMessage) message;
+        MlatMessage mlatMessage = (MlatMessage) message;
         return messages.get(mlatMessage.getObjectId()).add(mlatMessage);
     }
 
