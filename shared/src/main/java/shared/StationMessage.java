@@ -2,28 +2,26 @@ package shared;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.time.Instant;
 import java.util.Objects;
 
-
-public class MlatMessage extends Message implements Serializable {
+public class StationMessage extends Message implements Serializable {
 
     private final int objectId;
-    private final long sendTime;
+    private final long ToT;
     private final transient int stationId;
 
-    public MlatMessage(int objectId, long sendTime) {
-        this(objectId,sendTime, 0);
+    public StationMessage(int objectId, long ToT) {
+        this(objectId, ToT, 0);
     }
 
-    public MlatMessage(int objectId, long sendTime, int stationId) {
+    public StationMessage(int objectId, long ToT, int stationId) {
         this.objectId = objectId;
-        this.sendTime = sendTime;
+        this.ToT = ToT;
         this.stationId = stationId;
 
         ByteBuffer buf = ByteBuffer.allocate(12);
         buf.putInt(objectId);
-        buf.putLong(sendTime);
+        buf.putLong(ToT);
 
         int checksum = 0;
         for (byte b : buf.array())
@@ -34,8 +32,8 @@ public class MlatMessage extends Message implements Serializable {
         return objectId;
     }
 
-    public long getSendTime() {
-        return sendTime;
+    public long getToT() {
+        return ToT;
     }
 
     public int getStationId() {
@@ -46,16 +44,12 @@ public class MlatMessage extends Message implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MlatMessage that = (MlatMessage) o;
-        return objectId == that.objectId && sendTime == that.sendTime;
+        StationMessage that = (StationMessage) o;
+        return objectId == that.objectId && ToT == that.ToT;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(objectId, sendTime);
-    }
-
-    public static void main(String[] args) {
-        new MlatMessage(7, System.nanoTime(), 3);
+        return Objects.hash(objectId, ToT);
     }
 }

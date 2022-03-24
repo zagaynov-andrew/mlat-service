@@ -10,12 +10,14 @@ public class Server {
 
     public static void main(String[] args) {
 
+        MlatSystem mlatSystem = new MlatSystem();
+
         System.out.println("Waiting for a connection on " + PORT);
         try (ServerSocket listener = new ServerSocket(PORT)) {
 
             while (true) {
                 Socket newClient = listener.accept();
-                new MlatThread(newClient).start();
+                new MlatThread(newClient, mlatSystem).start();
             }
         } catch (IOException ex) {
             ex.printStackTrace(System.out);

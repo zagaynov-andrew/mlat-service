@@ -1,9 +1,11 @@
 package shared;
 
+import java.io.Serializable;
+
 /**
  * @brief Stores the location.
  */
-public class Location {
+public class Location implements Serializable {
 
-    public float x;
+    public double x;
 }

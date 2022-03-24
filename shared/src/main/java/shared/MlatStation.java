@@ -1,10 +1,8 @@
-package datacenter;
-
-import shared.Location2D;
+package shared;
 
 public class MlatStation extends Station {
 
-    MlatStation(int id, Location2D location) {
+    public MlatStation(int id, Location2D location) {
         this.id = id;
         this.location = location;
     }

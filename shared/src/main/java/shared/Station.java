@@ -1,8 +1,10 @@
-package datacenter;
+package shared;
 
 import shared.Location;
 
-public class Station {
+import java.io.Serializable;
+
+public class Station implements Serializable {
 
     protected int id;
     protected Location location;
