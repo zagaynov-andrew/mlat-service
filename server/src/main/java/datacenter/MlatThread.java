@@ -26,7 +26,20 @@ public class MlatThread extends Thread {
     @Override
     public void run() {
         try {
+            // Station 1
             MlatStation station = (MlatStation) in.readObject();
+            System.out.println("New station: id " + station.getId());
+            synchronized (mlatSystem) {
+                mlatSystem.addStation(station);
+            }
+            // Station 2
+            station = (MlatStation) in.readObject();
+            System.out.println("New station: id " + station.getId());
+            synchronized (mlatSystem) {
+                mlatSystem.addStation(station);
+            }
+            // Station 3
+            station = (MlatStation) in.readObject();
             System.out.println("New station: id " + station.getId());
             synchronized (mlatSystem) {
                 mlatSystem.addStation(station);
@@ -35,7 +48,7 @@ public class MlatThread extends Thread {
             while (!socket.isClosed()) {
                 StationMessage message = (StationMessage) in.readObject();
                 if (message != null) {
-                    System.out.println("'" + message.getObjectId() + " " + message.getToT() + "'");
+                    System.out.println(message);
                     synchronized (mlatSystem) {
                         mlatSystem.addMessage(message);
                         mlatSystem.calculate(message);

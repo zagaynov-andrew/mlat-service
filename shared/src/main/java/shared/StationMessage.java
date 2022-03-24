@@ -8,20 +8,23 @@ public class StationMessage extends Message implements Serializable {
 
     private final int objectId;
     private final long ToT;
-    private final transient int stationId;
+    private final long ToF;
+    private final /*transient*/ int stationId;
 
-    public StationMessage(int objectId, long ToT) {
-        this(objectId, ToT, 0);
+    public StationMessage(int objectId, long ToT, long ToF) {
+        this(objectId, ToT, ToF, 0);
     }
 
-    public StationMessage(int objectId, long ToT, int stationId) {
+    public StationMessage(int objectId, long ToT, long ToF, int stationId) {
         this.objectId = objectId;
         this.ToT = ToT;
+        this.ToF = ToF;
         this.stationId = stationId;
 
-        ByteBuffer buf = ByteBuffer.allocate(12);
+        ByteBuffer buf = ByteBuffer.allocate(20);
         buf.putInt(objectId);
         buf.putLong(ToT);
+        buf.putLong(ToF);
 
         int checksum = 0;
         for (byte b : buf.array())
@@ -36,8 +39,20 @@ public class StationMessage extends Message implements Serializable {
         return ToT;
     }
 
+    public long getToF() {
+        return ToF;
+    }
+
     public int getStationId() {
         return stationId;
+    }
+
+    @Override
+    public String toString() {
+        return "objectId=" + objectId +
+               ", stationId=" + stationId +
+               ", ToT=" + ToT +
+               ", ToF=" + ToF;
     }
 
     @Override

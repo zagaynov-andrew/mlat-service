@@ -1,7 +1,5 @@
 package shared;
 
-import shared.Location;
-
 import java.io.Serializable;
 
 public class Station implements Serializable {
