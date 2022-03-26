@@ -11,8 +11,6 @@
     <modules>
         <module>server</module>
         <module>shared</module>
-        <module>tram</module>
-        <module>station</module>
         <module>test-datacenter</module>
     </modules>
 

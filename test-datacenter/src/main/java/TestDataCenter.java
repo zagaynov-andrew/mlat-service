@@ -29,6 +29,11 @@ public class TestDataCenter {
         return res;
     }
 
+    public static long getCurTime() {
+        Instant now = Instant.now();
+        return now.getEpochSecond() * 1000000000L + now.getNano();
+    }
+
     public static void main(String[] args) {
 
         if (args.length < 1) {
@@ -56,16 +61,16 @@ public class TestDataCenter {
             long lastSend;
             int i = 11;
             while (!socket.isOutputShutdown() && i != dataArray.size()) {
-                lastSend = System.nanoTime();
+                lastSend = getCurTime();
                 StationMessage msg_1 = new StationMessage(dataArray.get(i), lastSend, dataArray.get(i + 4), dataArray.get(i + 1));
                 StationMessage msg_2 = new StationMessage(dataArray.get(i), lastSend, dataArray.get(i + 5), dataArray.get(i + 2));
                 StationMessage msg_3 = new StationMessage(dataArray.get(i), lastSend, dataArray.get(i + 6), dataArray.get(i + 3));
-                System.out.println("Real send time:\t" + System.nanoTime() / 1000000L + " ms");
+                System.out.println("Real send time:\t" + getCurTime() / 1000000L + " ms");
                 out.writeObject(msg_1);
                 out.writeObject(msg_2);
                 out.writeObject(msg_3);
 
-                while (System.nanoTime() - lastSend < updateDelay) {
+                while (getCurTime() - lastSend < updateDelay) {
                     Thread.sleep(0,10);
                 }
                 System.out.println(Instant.now());

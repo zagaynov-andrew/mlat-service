@@ -1,10 +1,9 @@
 package shared;
 
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-public class StationMessage extends Message implements Serializable {
+public class StationMessage extends Message {
 
     private final int objectId;
     private final long ToT;
@@ -47,6 +46,18 @@ public class StationMessage extends Message implements Serializable {
         return stationId;
     }
 
+    private String getReadableTime(long nanos){
+
+        long tempSec    = nanos / 1000000000L;
+        long ms         = (nanos / 1000000L) % 1000L;
+        long sec        = tempSec % 60;
+        long min        = (tempSec / 60) % 60;
+        long hour       = (tempSec / (60 * 60)) % 24;
+        long day        = (tempSec / (24 * 60 * 60)) % 24;
+
+        return String.format("%dd %dh %dm %ds %dms", day, hour, min, sec, ms);
+    }
+
     @Override
     public String toString() {
         return "objectId=" + objectId +
@@ -55,16 +66,20 @@ public class StationMessage extends Message implements Serializable {
                ", ToF=" + ToF;
     }
 
+    public boolean isCorrectChecksum() {
+        return checksum == this.hashCode();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StationMessage that = (StationMessage) o;
-        return objectId == that.objectId && ToT == that.ToT;
+        return objectId == that.objectId && ToT == that.ToT && ToF == that.ToF;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(objectId, ToT);
+        return Objects.hash(objectId, ToT, ToF);
     }
 }
