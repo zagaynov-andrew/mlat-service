@@ -19,15 +19,7 @@ public class StationMessage extends Message {
         this.ToT = ToT;
         this.ToF = ToF;
         this.stationId = stationId;
-
-        ByteBuffer buf = ByteBuffer.allocate(20);
-        buf.putInt(objectId);
-        buf.putLong(ToT);
-        buf.putLong(ToF);
-
-        int checksum = 0;
-        for (byte b : buf.array())
-            checksum = Integer.rotateLeft(checksum, 1) ^ b;
+        this.checksum = this.hashCode();
     }
 
     public int getObjectId() {

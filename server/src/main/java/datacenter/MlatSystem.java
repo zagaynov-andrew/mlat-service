@@ -8,28 +8,47 @@ import java.util.HashMap;
 
 public class MlatSystem {
 
-    private static final long TIMEOUT = 1000000000;
+    private static final long TIMEOUT = 1000000000L;
+    private static final double MAX_MOVE_PER_SEC = 10.;
+    private static final double MAX_LAST_ERR_SEC = 7.;
+
     private HashMap<Integer, Long>                      lastCheck = new HashMap<>();
     private HashMap<Integer, MlatStation>               stations  = new HashMap<>();
     private HashMap<Integer, ArrayList<StationMessage>> messages  = new HashMap<>();
+    private HashMap<Integer, LocationStamp>             lastLocationStamp = new HashMap<>();
 
     public boolean addStation(MlatStation station) {
-        if (stations.put(station.getId(), station) != null) {
-            System.out.println("New station " + station.getId());
-            return true;
-        } else return false;
+        if (stations.containsKey(station.getId()))
+            return false;
+        stations.put(station.getId(), station);
+        return true;
     }
 
     public boolean removeStation(int id) {
-        if (stations.remove(id) != null) {
-            System.out.println("Station " + id + " removed");
-            return true;
-        } else return false;
+        return stations.remove(id) != null;
     }
 
     public boolean addMessage(StationMessage msg) {
         messages.computeIfAbsent(msg.getObjectId(), k -> new ArrayList<>());
         return messages.get(msg.getObjectId()).add(msg);
+    }
+
+    public boolean addLastLocationStamp(LocationStamp locationStamp) {
+
+        LocationStamp lastLocation = lastLocationStamp.get(locationStamp.getObjectId());
+
+        if (lastLocation == null)
+            lastLocationStamp.put(locationStamp.getObjectId(), locationStamp);
+        else {
+            double delta_x = lastLocation.getLocation().x - locationStamp.getLocation().x;
+            double delta_y = lastLocation.getLocation().y - locationStamp.getLocation().y;
+            double timestampDiff = (double) (locationStamp.getTimestamp() - lastLocation.getTimestamp()) / 1000000000L;
+            if (Math.sqrt(delta_x * delta_x + delta_y * delta_y) > timestampDiff * MAX_MOVE_PER_SEC
+                && timestampDiff < MAX_LAST_ERR_SEC)
+                return false;
+            lastLocationStamp.put(locationStamp.getObjectId(), locationStamp);
+        }
+        return true;
     }
 
     public Location2D calculate(StationMessage msg) {
@@ -51,10 +70,10 @@ public class MlatSystem {
             return null;
         }
 
-        for (StationMessage cur : curMessages) {
-            System.out.print("\t");
-            System.out.println(cur);
-        }
+//        for (StationMessage cur : curMessages) {
+//            System.out.print("\t");
+//            System.out.println(cur);
+//        }
 
         StationMessage msg1 = curMessages.get(0);
         StationMessage msg2 = curMessages.get(1);
@@ -92,9 +111,5 @@ public class MlatSystem {
         long day        = (tempSec / (24 * 60 * 60)) % 24;
 
         return String.format("%dd %dh %dm %ds %dms", day, hour, min, sec, ms);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(TIMEOUT);
     }
 }

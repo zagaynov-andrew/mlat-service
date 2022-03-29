@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="server" />
+        <module name="shared" />
+        <module name="test-datacenter" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="--add-modules java.base" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="mlat-service" options="" />
+      <module name="server" options="--add-modules java.base" />
+      <module name="shared" options="--add-modules java.base" />
+      <module name="test-datacenter" options="" />
+    </option>
+  </component>
+</project>
