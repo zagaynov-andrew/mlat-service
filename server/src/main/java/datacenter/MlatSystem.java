@@ -11,6 +11,7 @@ public class MlatSystem {
     private static final long TIMEOUT = 1000000000L;
     private static final double MAX_MOVE_PER_SEC = 10.;
     private static final double MAX_LAST_ERR_SEC = 7.;
+    private static final double LOCATION_ERROR_M = 10.;
 
     private HashMap<Integer, Long>                      lastCheck = new HashMap<>();
     private HashMap<Integer, MlatStation>               stations  = new HashMap<>();
@@ -79,9 +80,9 @@ public class MlatSystem {
         StationMessage msg2 = curMessages.get(1);
         StationMessage msg3 = curMessages.get(2);
 
-        long r1 = msg1.getToF() / 10 * 3;
-        long r2 = msg2.getToF() / 10 * 3;
-        long r3 = msg3.getToF() / 10 * 3;
+        double r1 = msg1.getToF() / 10. * 3.;
+        double r2 = msg2.getToF() / 10. * 3.;
+        double r3 = msg3.getToF() / 10. * 3.;
 
         int stationId1 = msg1.getStationId();
         int stationId2 = msg2.getStationId();
@@ -98,7 +99,12 @@ public class MlatSystem {
 
         double x = ((y2 - y1) * (r2 * r2 - r3 * r3 - y2 * y2 + y3 * y3 - x2 * x2 + x3 * x3) - (y3 - y2) * (r1 * r1 - r2 * r2 - y1 * y1 + y2 * y2 - x1 * x1 + x2 * x2)) / (2 * ((y3 - y2) * (x1 - x2)  - (y2 - y1) * (x2 - x3)));
         double y = ((x2 - x1) * (r2 * r2 - r3 * r3 - x2 * x2 + x3 * x3 - y2 * y2 + y3 * y3) - (x3 - x2) * (r1 * r1 - r2 * r2 - x1 * x1 + x2 * x2 - y1 * y1 + y2 * y2)) / (2 * ((x3 - x2) * (y1 - y2)  - (x2 - x1) * (y2 - y3)));
-        return new Location2D(x, y);
+
+        double r1_tmp = Math.sqrt((x1 - x) * (x1 - x) + (y1 - y) * (y1 - y));
+        if (Math.abs(r1_tmp - r1) < LOCATION_ERROR_M)
+            return new Location2D(x, y);
+        System.out.println("Impossible location!");
+        return null;
     }
 
     private String getReadableTime(long nanos){

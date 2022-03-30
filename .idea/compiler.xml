@@ -16,8 +16,8 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="--add-modules java.base" />
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="mlat-service" options="" />
-      <module name="server" options="--add-modules java.base" />
-      <module name="shared" options="--add-modules java.base" />
+      <module name="server" options="" />
+      <module name="shared" options="" />
       <module name="test-datacenter" options="" />
     </option>
   </component>
