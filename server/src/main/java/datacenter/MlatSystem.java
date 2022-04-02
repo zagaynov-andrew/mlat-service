@@ -71,11 +71,6 @@ public class MlatSystem {
             return null;
         }
 
-//        for (StationMessage cur : curMessages) {
-//            System.out.print("\t");
-//            System.out.println(cur);
-//        }
-
         StationMessage msg1 = curMessages.get(0);
         StationMessage msg2 = curMessages.get(1);
         StationMessage msg3 = curMessages.get(2);
