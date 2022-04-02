@@ -29,44 +29,18 @@ public class MlatThread extends Thread {
 
     @Override
     public void run() {
-        int station1Id = 0;
-        int station2Id = 0;
-        int station3Id = 0;
+        int stationId = 0;
 
         // Add stations
         try {
-            // Station 1
+            // Add station
             MlatStation station = (MlatStation) in.readObject();
-            station1Id = station.getId();
+            stationId = station.getId();
             synchronized (mlatSystem) {
                 if (mlatSystem.addStation(station))
                     log.info("New station " + station.getId());
                 else {
                     log.warn("Such station is already connected: id " + station.getId());
-                    socket.close();
-                    return;
-                }
-            }
-            // Station 2
-            station = (MlatStation) in.readObject();
-            station2Id = station.getId();
-            synchronized (mlatSystem) {
-                if (mlatSystem.addStation(station))
-                    log.info("New station " + station.getId());
-                else {
-                    log.warn("Such station is already connected: id " + station.getId());
-                    socket.close();
-                    return;
-                }
-            }
-            // Station 3
-            station = (MlatStation) in.readObject();
-            station3Id = station.getId();
-            synchronized (mlatSystem) {
-                if (mlatSystem.addStation(station))
-                    log.info("New station " + station.getId());
-                else {
-                    log.warn("Stopping an attempt to connect the station : matching id : " + station.getId());
                     socket.close();
                     return;
                 }
@@ -79,7 +53,6 @@ public class MlatThread extends Thread {
         try {
             Location2D curLocation;
             while (!socket.isClosed()) {
-                curLocation = null;
                 StationMessage message = (StationMessage) in.readObject();
 
                 if (message != null) {
@@ -87,7 +60,6 @@ public class MlatThread extends Thread {
                         log.warn("Invalid checksum");
                         continue;
                     }
-//                    System.out.println(message);
                     synchronized (mlatSystem) {
                         mlatSystem.addMessage(message);
                         curLocation = mlatSystem.calculate(message);
@@ -122,12 +94,8 @@ public class MlatThread extends Thread {
         }
         finally {
             synchronized (mlatSystem) {
-                if (mlatSystem.removeStation(station1Id))
-                    log.info("Station " + station1Id + " removed");
-                if (mlatSystem.removeStation(station2Id))
-                    log.info("Station " + station2Id + " removed");
-                if (mlatSystem.removeStation(station3Id))
-                    log.info("Station " + station3Id + " removed");
+                if (mlatSystem.removeStation(stationId))
+                    log.info("Station " + stationId + " removed");
             }
         }
     }
